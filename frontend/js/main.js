@@ -68,18 +68,57 @@ list.addEventListener("change", async (event) => {
   }
 });
 
-// Delete a todo when its Delete button is clicked
-list.addEventListener("click", async (event) => {
-  const button = event.target.closest(".todo__delete");
-  if (!button) return;
+// Save the edited title of a row
+async function saveEdit(item) {
+  const newTitle = ui.getEditedTitle(item).trim();
+  const oldTitle = item.querySelector(".todo__title").textContent;
+
+  // Nothing changed, so leave edit mode without calling the API
+  if (newTitle === oldTitle) {
+    ui.stopEditing(item);
+    return;
+  }
+
+  ui.showListError(null);
 
   try {
-    const result = await api.deleteTodo(getTodoId(button));
+    await api.updateTodo(getTodoId(item), { title: newTitle });
+    ui.showToast("Todo updated");
+    await loadTodos();
+  } catch (error) {
+    ui.showListError(error.message);
+  }
+}
+
+// Delete a todo and confirm which one was removed
+async function removeTodo(item) {
+  try {
+    const result = await api.deleteTodo(getTodoId(item));
     ui.showToast(result.message);
     await loadTodos();
   } catch (error) {
     ui.showListError(error.message);
   }
+}
+
+// Handle all button clicks inside the list (edit, cancel, save, delete)
+list.addEventListener("click", (event) => {
+  const item = event.target.closest(".todo");
+  if (!item) return;
+
+  if (event.target.closest(".todo__edit")) ui.startEditing(item);
+  else if (event.target.closest(".todo__cancel")) ui.stopEditing(item);
+  else if (event.target.closest(".todo__save")) saveEdit(item);
+  else if (event.target.closest(".todo__delete")) removeTodo(item);
+});
+
+// Keyboard shortcuts in the edit input: Enter saves, Escape cancels
+list.addEventListener("keydown", (event) => {
+  if (!event.target.matches(".todo__edit-input")) return;
+
+  const item = event.target.closest(".todo");
+  if (event.key === "Enter") saveEdit(item);
+  if (event.key === "Escape") ui.stopEditing(item);
 });
 
 // Switch the status filter (All / Active / Completed)

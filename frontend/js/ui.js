@@ -121,3 +121,44 @@ export function resetForm() {
   form.reset();
   titleInput.focus();
 }
+
+// Show Save/Cancel instead of Edit/Delete (or the reverse) for one row
+function toggleEditButtons(item, isEditing) {
+  item.classList.toggle("todo--editing", isEditing);
+  item.querySelector(".todo__edit").hidden = isEditing;
+  item.querySelector(".todo__delete").hidden = isEditing;
+  item.querySelector(".todo__save").hidden = !isEditing;
+  item.querySelector(".todo__cancel").hidden = !isEditing;
+}
+
+// Switch a row into edit mode: hide the title and show an input with its text
+export function startEditing(item) {
+  if (item.classList.contains("todo--editing")) return;
+
+  const title = item.querySelector(".todo__title");
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "todo__edit-input";
+  input.maxLength = 200;
+  input.value = title.textContent;
+  input.setAttribute("aria-label", "Edit task title");
+
+  title.hidden = true;
+  title.after(input);
+  toggleEditButtons(item, true);
+
+  input.focus();
+  input.select();
+}
+
+// Leave edit mode and restore the original title
+export function stopEditing(item) {
+  item.querySelector(".todo__edit-input")?.remove();
+  item.querySelector(".todo__title").hidden = false;
+  toggleEditButtons(item, false);
+}
+
+// Read what the user typed in the edit input
+export function getEditedTitle(item) {
+  return item.querySelector(".todo__edit-input").value;
+}

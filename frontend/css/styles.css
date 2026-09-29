@@ -362,3 +362,13 @@ button:focus-visible {
   border-radius: 10px;
   box-shadow: var(--shadow);
 }
+
+/* Highlight the row being edited */
+.todo--editing {
+  border-color: var(--primary);
+}
+
+/* Inline title input (base input styles already apply) */
+.todo__edit-input {
+  font-weight: 600;
+}
