@@ -80,77 +80,8 @@
         <p class="empty__text">Add your first task using the form above.</p>
       </div>
 
-      <!-- Todo list (sample items below are temporary and removed in phase 7) -->
-      <ul id="todo-list" class="todo-list">
-        <li class="todo" data-id="1">
-          <input
-            type="checkbox"
-            class="todo__check"
-            aria-label="Mark as completed"
-          />
-          <div class="todo__body">
-            <span class="todo__title">Submit project report</span>
-            <div class="todo__meta">
-              <span class="badge badge--high">High</span>
-              <span class="todo__due todo__due--overdue">Due Sep 20, 2026</span>
-            </div>
-          </div>
-          <div class="todo__actions">
-            <button type="button" class="btn btn--ghost todo__edit">
-              Edit
-            </button>
-            <button type="button" class="btn btn--danger todo__delete">
-              Delete
-            </button>
-          </div>
-        </li>
-
-        <li class="todo" data-id="2">
-          <input
-            type="checkbox"
-            class="todo__check"
-            aria-label="Mark as completed"
-          />
-          <div class="todo__body">
-            <span class="todo__title">Buy groceries</span>
-            <div class="todo__meta">
-              <span class="badge badge--medium">Medium</span>
-              <span class="todo__due">Due Oct 5, 2026</span>
-            </div>
-          </div>
-          <div class="todo__actions">
-            <button type="button" class="btn btn--ghost todo__edit">
-              Edit
-            </button>
-            <button type="button" class="btn btn--danger todo__delete">
-              Delete
-            </button>
-          </div>
-        </li>
-
-        <li class="todo todo--completed" data-id="3">
-          <input
-            type="checkbox"
-            class="todo__check"
-            aria-label="Mark as not completed"
-            checked
-          />
-          <div class="todo__body">
-            <span class="todo__title">Read chapter 3</span>
-            <div class="todo__meta">
-              <span class="badge badge--low">Low</span>
-            </div>
-          </div>
-          <div class="todo__actions">
-            <button type="button" class="btn btn--ghost todo__edit">
-              Edit
-            </button>
-            <button type="button" class="btn btn--danger todo__delete">
-              Delete
-            </button>
-          </div>
-        </li>
-      </ul>
+      <!-- Todo list (JS fills this in) -->
+      <ul id="todo-list" class="todo-list"></ul>
 
       <!-- Small popup message for feedback like "Todo deleted" -->
       <div
@@ -161,5 +92,31 @@
         hidden
       ></div>
     </main>
+
+    <!-- Blueprint for one todo row; JS clones this for every todo -->
+    <template id="todo-template">
+      <li class="todo" data-id="">
+        <input
+          type="checkbox"
+          class="todo__check"
+          aria-label="Mark as completed"
+        />
+        <div class="todo__body">
+          <span class="todo__title"></span>
+          <div class="todo__meta">
+            <span class="badge"></span>
+            <span class="todo__due" hidden></span>
+          </div>
+        </div>
+        <div class="todo__actions">
+          <button type="button" class="btn btn--ghost todo__edit">Edit</button>
+          <button type="button" class="btn btn--danger todo__delete">
+            Delete
+          </button>
+        </div>
+      </li>
+    </template>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
