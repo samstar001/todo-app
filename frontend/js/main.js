@@ -6,6 +6,8 @@ const form = document.getElementById("add-form");
 const list = document.getElementById("todo-list");
 const statusTabs = document.querySelector(".filters__tabs");
 const priorityFilter = document.getElementById("priority-filter");
+const retryButton = document.getElementById("retry-btn");
+let hasLoadedOnce = false;
 
 // Current filter selection
 const state = { status: "all", priority: "" };
@@ -26,30 +28,49 @@ function getTodoId(element) {
 
 // Fetch todos from the API and draw them
 async function loadTodos() {
-  ui.showLoading(true);
   ui.showListError(null);
+
+  // Show the loading message only on the first load to avoid flicker
+  let slowTimer;
+  if (!hasLoadedOnce) {
+    ui.showLoading(true);
+    slowTimer = setTimeout(() => {
+      ui.setLoadingText(
+        "Waking up the server… this can take up to a minute on free hosting.",
+      );
+    }, 4000);
+  }
 
   try {
     const todos = await api.fetchTodos(buildFilters());
     ui.renderTodos(todos);
+    hasLoadedOnce = true;
   } catch (error) {
     ui.showListError(error.message);
   } finally {
+    clearTimeout(slowTimer);
     ui.showLoading(false);
   }
 }
+
+// Retry loading after an error
+retryButton.addEventListener("click", loadTodos);
 
 // Add a todo when the form is submitted
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   ui.showFormError(null);
+  ui.setFormBusy(true);
 
   try {
     await api.createTodo(ui.getFormValues());
     ui.resetForm();
+    ui.showToast("Task added");
     await loadTodos();
   } catch (error) {
     ui.showFormError(error.message);
+  } finally {
+    ui.setFormBusy(false);
   }
 });
 

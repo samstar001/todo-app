@@ -74,7 +74,17 @@
 
       <!-- List states: loading, error, empty (JS will show/hide these) -->
       <p id="loading" class="message" hidden>Loading your todos…</p>
-      <p id="list-error" class="message message--error" role="alert" hidden></p>
+      <div
+        id="list-error"
+        class="message message--error message--row"
+        role="alert"
+        hidden
+      >
+        <span id="list-error-text"></span>
+        <button type="button" id="retry-btn" class="btn btn--ghost">
+          Try again
+        </button>
+      </div>
       <div id="empty-state" class="empty" hidden>
         <p class="empty__title">Nothing here yet</p>
         <p class="empty__text">Add your first task using the form above.</p>

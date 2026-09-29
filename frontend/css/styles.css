@@ -372,3 +372,22 @@ button:focus-visible {
 .todo__edit-input {
   font-weight: 600;
 }
+
+/* Message with text on the left and a button on the right */
+.message--row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.message--row .btn {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+}
+
+/* Disabled buttons look inactive */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

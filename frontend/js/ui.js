@@ -9,6 +9,8 @@ const emptyState = document.getElementById("empty-state");
 const formError = document.getElementById("form-error");
 const toast = document.getElementById("toast");
 const tabs = document.querySelectorAll(".tab");
+const listErrorText = document.getElementById("list-error-text");
+const submitButton = form.querySelector('button[type="submit"]');
 
 // Uppercase the first letter, e.g. "high" -> "High"
 function capitalize(text) {
@@ -70,18 +72,32 @@ export function renderTodos(todos) {
   emptyState.hidden = todos.length > 0;
 }
 
-// Show or hide the loading message
+// Default loading message
+const DEFAULT_LOADING_TEXT = "Loading your todos…";
+
+// Show or hide the loading message (and reset its text)
 export function showLoading(isLoading) {
+  loading.textContent = DEFAULT_LOADING_TEXT;
   loading.hidden = !isLoading;
   if (isLoading) emptyState.hidden = true;
 }
 
+// Change the loading message text (used for the slow-server hint)
+export function setLoadingText(text) {
+  loading.textContent = text;
+}
+
 // Show an error above the list, or hide it when message is null
 export function showListError(message) {
-  listError.textContent = message ?? "";
+  listErrorText.textContent = message ?? "";
   listError.hidden = !message;
 }
 
+// Disable the Add button while a request is running
+export function setFormBusy(isBusy) {
+  submitButton.disabled = isBusy;
+  submitButton.textContent = isBusy ? "Adding…" : "Add task";
+}
 // Show an error under the add form, or hide it when message is null
 export function showFormError(message) {
   formError.textContent = message ?? "";
