@@ -44,3 +44,54 @@ export function getAllTodos({ completed, priority } = {}) {
 
   return db.prepare(sql).all(params).map(toTodo);
 }
+
+// Prepared statement for deleting by id
+const deleteTodoById = db.prepare("DELETE FROM todos WHERE id = ?");
+
+// Find one todo by id, or return null if it doesn't exist
+export function getTodoById(id) {
+  const row = selectTodoById.get(id);
+  return row ? toTodo(row) : null;
+}
+
+// Update only the provided fields; return the updated todo, or null if not found
+export function updateTodo(id, changes) {
+  if (!selectTodoById.get(id)) return null;
+
+  const fields = [];
+  const params = { id };
+
+  if (changes.title !== undefined) {
+    fields.push("title = @title");
+    params.title = changes.title;
+  }
+  if (changes.completed !== undefined) {
+    fields.push("completed = @completed");
+    params.completed = changes.completed ? 1 : 0;
+  }
+  if (changes.priority !== undefined) {
+    fields.push("priority = @priority");
+    params.priority = changes.priority;
+  }
+  if (changes.dueDate !== undefined) {
+    fields.push("due_date = @dueDate");
+    params.dueDate = changes.dueDate;
+  }
+
+  // Always refresh the modification time
+  fields.push("updated_at = datetime('now')");
+
+  db.prepare(`UPDATE todos SET ${fields.join(", ")} WHERE id = @id`).run(
+    params,
+  );
+  return toTodo(selectTodoById.get(id));
+}
+
+// Delete a todo; return the deleted todo, or null if it didn't exist
+export function deleteTodo(id) {
+  const todo = getTodoById(id);
+  if (!todo) return null;
+
+  deleteTodoById.run(id);
+  return todo;
+}

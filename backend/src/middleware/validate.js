@@ -1,11 +1,9 @@
+import { httpError } from "../utils/httpError.js";
+
 const PRIORITIES = ["low", "medium", "high"];
 
-// Build an error carrying a 400 status so errorHandler can format it
-function badRequest(message) {
-  const err = new Error(message);
-  err.status = 400;
-  return err;
-}
+// Shortcut for a 400 Bad Request error
+const badRequest = (message) => httpError(400, message);
 
 // Check a value is a real calendar date in YYYY-MM-DD format
 function isValidDate(value) {
@@ -59,5 +57,67 @@ export function validateListQuery(req, res, next) {
   }
 
   req.filters = filters;
+  next();
+}
+
+// Make sure :id is a positive whole number and store it as a number on the request
+export function validateIdParam(req, res, next) {
+  const { id } = req.params;
+
+  if (!/^\d+$/.test(id) || Number(id) < 1) {
+    return next(badRequest("id must be a positive integer"));
+  }
+
+  req.todoId = Number(id);
+  next();
+}
+
+// Validate the body of PATCH /api/todos/:id (all fields optional, at least one required)
+export function validateUpdateTodo(req, res, next) {
+  const body = req.body ?? {};
+  const changes = {};
+
+  if (body.title !== undefined) {
+    if (typeof body.title !== "string" || body.title.trim().length === 0) {
+      return next(badRequest("Title must be a non-empty string"));
+    }
+    if (body.title.trim().length > 200) {
+      return next(badRequest("Title must be 200 characters or fewer"));
+    }
+    changes.title = body.title.trim();
+  }
+
+  if (body.completed !== undefined) {
+    if (typeof body.completed !== "boolean") {
+      return next(badRequest("completed must be true or false"));
+    }
+    changes.completed = body.completed;
+  }
+
+  if (body.priority !== undefined) {
+    if (!PRIORITIES.includes(body.priority)) {
+      return next(badRequest("Priority must be one of: low, medium, high"));
+    }
+    changes.priority = body.priority;
+  }
+
+  if (body.dueDate !== undefined) {
+    if (body.dueDate !== null && !isValidDate(body.dueDate)) {
+      return next(
+        badRequest("dueDate must be a valid date (YYYY-MM-DD) or null"),
+      );
+    }
+    changes.dueDate = body.dueDate;
+  }
+
+  if (Object.keys(changes).length === 0) {
+    return next(
+      badRequest(
+        "Provide at least one field to update: title, completed, priority, dueDate",
+      ),
+    );
+  }
+
+  req.changes = changes;
   next();
 }
