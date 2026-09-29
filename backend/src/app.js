@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
+import db from "./db/database.js";
 import env from "./config/env.js";
 import errorHandler from "./middleware/errorHandler.js";
 
@@ -16,7 +17,12 @@ app.use(express.json());
 
 // API routes
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok", uptime: process.uptime() });
+  const row = db.prepare("SELECT 1 AS ok").get();
+  res.status(200).json({
+    status: "ok",
+    database: row.ok === 1 ? "connected" : "error",
+    uptime: process.uptime(),
+  });
 });
 
 // Serve the frontend (backend/src -> ../../frontend)
