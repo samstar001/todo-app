@@ -1,0 +1,364 @@
+/* Design tokens: colors, radius and shadow in one place */
+:root {
+  --bg: #f4f5f9;
+  --surface: #ffffff;
+  --text: #1f2430;
+  --muted: #6b7280;
+  --border: #e3e6ee;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --danger: #dc2626;
+  --danger-bg: #fee2e2;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+/* Basic reset so sizing is predictable */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Make the hidden attribute always win over display rules */
+[hidden] {
+  display: none !important;
+}
+
+/* Page base styles */
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Centered content column */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+/* Header */
+.app__header {
+  margin-bottom: 24px;
+}
+
+.app__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.app__subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+/* Reusable white card */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Form fields: label above input */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Clear focus ring for keyboard users */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Add form: stacked on mobile */
+.add-form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* Add form: one row on wider screens */
+@media (min-width: 640px) {
+  .add-form {
+    grid-template-columns: 1fr 130px 160px auto;
+    align-items: end;
+  }
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 16px;
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn--primary {
+  color: #fff;
+  background: var(--primary);
+}
+
+.btn--primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn--ghost {
+  color: var(--text);
+  background: transparent;
+  border-color: var(--border);
+}
+
+.btn--ghost:hover {
+  background: var(--bg);
+}
+
+.btn--danger {
+  color: var(--danger);
+  background: transparent;
+  border-color: var(--danger-bg);
+}
+
+.btn--danger:hover {
+  background: var(--danger-bg);
+}
+
+/* Filters row */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.filters__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.tab {
+  padding: 6px 14px;
+  font: inherit;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tab--active {
+  color: #fff;
+  background: var(--primary);
+}
+
+/* Inline label + select (priority filter) */
+.field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.field--inline select {
+  width: auto;
+}
+
+/* Grow a field to fill leftover space */
+.field--grow {
+  min-width: 0;
+}
+
+/* Status messages (loading and errors) */
+.message {
+  margin: 12px 0;
+  padding: 10px 14px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.message--error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger-bg);
+}
+
+/* Empty state */
+.empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty__text {
+  margin: 4px 0 0;
+}
+
+/* Todo list container */
+.todo-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Single todo row: checkbox, text, actions */
+.todo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.todo__check {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.todo__body {
+  min-width: 0;
+}
+
+.todo__title {
+  display: block;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Priority badge and due date under the title */
+.todo__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.todo__due--overdue {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.todo__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.todo__actions .btn {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+}
+
+/* Completed todo: faded with strikethrough title */
+.todo--completed .todo__title {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.todo--completed {
+  opacity: 0.75;
+}
+
+/* Priority badges */
+.badge {
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.badge--low {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.badge--medium {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.badge--high {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+/* Small screens: actions drop below the text */
+@media (max-width: 520px) {
+  .todo {
+    grid-template-columns: auto 1fr;
+  }
+
+  .todo__actions {
+    grid-column: 2;
+  }
+}
+
+/* Toast popup for quick feedback */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 12px 18px;
+  color: #fff;
+  background: var(--text);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}

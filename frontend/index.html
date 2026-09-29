@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <!-- Page header -->
+      <header class="app__header">
+        <h1>My Todos</h1>
+        <p class="app__subtitle">Stay on top of what matters.</p>
+      </header>
+
+      <!-- Form for adding a new todo -->
+      <form id="add-form" class="card add-form" novalidate>
+        <div class="field field--grow">
+          <label for="title-input">Task</label>
+          <input
+            id="title-input"
+            name="title"
+            type="text"
+            maxlength="200"
+            placeholder="What needs to be done?"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="priority-input">Priority</label>
+          <select id="priority-input" name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="due-input">Due date</label>
+          <input id="due-input" name="dueDate" type="date" />
+        </div>
+
+        <button type="submit" class="btn btn--primary">Add task</button>
+      </form>
+
+      <!-- Error message shown under the form (e.g. empty title) -->
+      <p id="form-error" class="message message--error" role="alert" hidden></p>
+
+      <!-- Filters: status tabs and priority dropdown -->
+      <section class="filters" aria-label="Filter todos">
+        <div class="filters__tabs" role="group" aria-label="Filter by status">
+          <button type="button" class="tab tab--active" data-filter="all">
+            All
+          </button>
+          <button type="button" class="tab" data-filter="active">Active</button>
+          <button type="button" class="tab" data-filter="completed">
+            Completed
+          </button>
+        </div>
+
+        <div class="field field--inline">
+          <label for="priority-filter">Priority</label>
+          <select id="priority-filter">
+            <option value="">All</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- List states: loading, error, empty (JS will show/hide these) -->
+      <p id="loading" class="message" hidden>Loading your todos…</p>
+      <p id="list-error" class="message message--error" role="alert" hidden></p>
+      <div id="empty-state" class="empty" hidden>
+        <p class="empty__title">Nothing here yet</p>
+        <p class="empty__text">Add your first task using the form above.</p>
+      </div>
+
+      <!-- Todo list (sample items below are temporary and removed in phase 7) -->
+      <ul id="todo-list" class="todo-list">
+        <li class="todo" data-id="1">
+          <input
+            type="checkbox"
+            class="todo__check"
+            aria-label="Mark as completed"
+          />
+          <div class="todo__body">
+            <span class="todo__title">Submit project report</span>
+            <div class="todo__meta">
+              <span class="badge badge--high">High</span>
+              <span class="todo__due todo__due--overdue">Due Sep 20, 2026</span>
+            </div>
+          </div>
+          <div class="todo__actions">
+            <button type="button" class="btn btn--ghost todo__edit">
+              Edit
+            </button>
+            <button type="button" class="btn btn--danger todo__delete">
+              Delete
+            </button>
+          </div>
+        </li>
+
+        <li class="todo" data-id="2">
+          <input
+            type="checkbox"
+            class="todo__check"
+            aria-label="Mark as completed"
+          />
+          <div class="todo__body">
+            <span class="todo__title">Buy groceries</span>
+            <div class="todo__meta">
+              <span class="badge badge--medium">Medium</span>
+              <span class="todo__due">Due Oct 5, 2026</span>
+            </div>
+          </div>
+          <div class="todo__actions">
+            <button type="button" class="btn btn--ghost todo__edit">
+              Edit
+            </button>
+            <button type="button" class="btn btn--danger todo__delete">
+              Delete
+            </button>
+          </div>
+        </li>
+
+        <li class="todo todo--completed" data-id="3">
+          <input
+            type="checkbox"
+            class="todo__check"
+            aria-label="Mark as not completed"
+            checked
+          />
+          <div class="todo__body">
+            <span class="todo__title">Read chapter 3</span>
+            <div class="todo__meta">
+              <span class="badge badge--low">Low</span>
+            </div>
+          </div>
+          <div class="todo__actions">
+            <button type="button" class="btn btn--ghost todo__edit">
+              Edit
+            </button>
+            <button type="button" class="btn btn--danger todo__delete">
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Small popup message for feedback like "Todo deleted" -->
+      <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
+    </main>
+  </body>
+</html>
