@@ -5,6 +5,7 @@ import cors from "cors";
 import db from "./db/database.js";
 import env from "./config/env.js";
 import errorHandler from "./middleware/errorHandler.js";
+import todosRoutes from "./routes/todos.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,9 @@ app.get("/api/health", (req, res) => {
     uptime: process.uptime(),
   });
 });
+
+// Todo routes
+app.use("/api/todos", todosRoutes);
 
 // Serve the frontend (backend/src -> ../../frontend)
 const frontendPath = path.join(__dirname, "..", "..", "frontend");
